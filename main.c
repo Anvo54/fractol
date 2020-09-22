@@ -25,7 +25,6 @@ void	*test_cal(void *args)
 	double zy;
 	double xold = 0;
 	double yold = 0;
-	int per = 0;
 	double xtemp;
 	size_t i;
 
@@ -41,13 +40,6 @@ void	*test_cal(void *args)
 		i++;
 		if (zx == xold && zy == yold)
 			break;
-		per++;
-		if (per > 20)
-		{
-			per = 0;
-			xold = zx;
-			yold = zy;
-		}
 	}
 	return (void*)i;
 }
@@ -68,9 +60,9 @@ int julia(t_mlx_data *data)
 			data->fract.new_im_n = (y - data->height / 2) / (0.5 * data->height);
 			data->fract.new_real_n = 1.5 * (x - data->width / 2) / (0.5 * data->width);
 			i = (int)test_cal(data);
-			int color = get_color(0, data->reds[i], data->greens[i], data->blues[i]);
+			//int color = get_color(0, data->reds[i], data->greens[i], data->blues[i]);
 			//add_pixel(data, x, y, color);
-			//add_pixel(data, x, y, i * 400 % color * (i < 50));
+			add_pixel(data, x, y, i * 300 % color * (i < data->max_iterations));
 		}
 	}
 	mlx_put_image_to_window(data->mlx_ptr, data->mlx_win, data->img_ptr, 0, 0);
@@ -121,21 +113,23 @@ int mousething(int x, int y, t_mlx_data *data)
 {
 	double perc_x = percent(0, data->width, x);
 	double perc_y = percent(0, data->height, y);
+	data->fract.cRe = -1 + (2 * perc_x);
+	data->fract.cIm = -1 + (2 * perc_y);
 
+	/*
 	if (data->prev_x != x || data->prev_y != y)
 	{
 		data->prev_x = x;
 		data->prev_y = y;
 		if ((!ft_strcmp(data->selected_f, "julia")))
 		{
-			data->fract.cRe = -1 + (2 * perc_x);
-			data->fract.cIm = -1 + (2 * perc_y);
 			julia(data);
 		}
 		if (!ft_strcmp(data->selected_f, "mandelbrot"))
 			mandelbrot(data);
 		
 	}
+	*/
 	return(1);
 }
 
@@ -179,26 +173,19 @@ int				main(int argc, char **argv)
 {
 	if (argc > 1)
 	{
-		int color = 0xFFFFFF;
 		t_mlx_data	data;
 
-		data.fract.cRe = -0.74543;
-		data.fract.cIm = 0.27015;
-
-		data.prev_x = 0;
-		data.prev_y = 0;
 		format_data(&data);
 		if (!ft_strcmp(argv[1], "julia") || !ft_strcmp(argv[1], "mandelbrot"))
 		{
-			data.selected_f = argv[1];
+			//data.selected_f = argv[1];
 			mlx_key_hook(data.mlx_win, deal_key, &data);
-			mlx_hook(data.mlx_win, 6, (1L<<6) ,mousething, &data);
+			mlx_hook(data.mlx_win, 6, (1L<<6), mousething, &data);
+			mlx_loop_hook(data.mlx_ptr, julia, &data);
 			mlx_loop(data.mlx_ptr);
 		}
 	}
 	else
 		ft_putstr(USAGE);
-
-	
 	return (0);
 }
