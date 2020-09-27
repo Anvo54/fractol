@@ -23,6 +23,7 @@
 # include <sys/stat.h>
 # include <fcntl.h>
 # include <pthread.h>
+#include <stdio.h>
 
 typedef	struct 			s_fractol
 {
@@ -51,11 +52,11 @@ typedef struct			s_mlx_data
 	int					prev_y;
 	double				move_x;
 	double				move_y;
+	double				zoom;
 	char				*selected_f;
 	int					max_iterations;
-	int					*reds;
-	int					*greens;
-	int					*blues;
+	int					*color;
+	int					rgb[3];
 	t_fractol			fract;
 }						t_mlx_data;
 

@@ -25,7 +25,7 @@ SRC =	ft_memset.c ft_strcat.c ft_strcpy.c ft_strdup.c ft_strlen.c \
 		ft_strtrim.c ft_strsplit.c ft_itoa.c ft_strnlen.c ft_lstnew.c \
 		ft_lstadd.c ft_lstadd.c ft_lstdel.c ft_del.c ft_lstmap.c ft_lstiter.c \
 		ft_lstdelone.c ft_abs.c get_next_line.c ft_count_char.c \
-		ft_itoa_base.c ft_hextoint.c
+		ft_itoa_base.c ft_hextoint.c ft_biggest_int.c ft_smallest_int.c
 
 
 OBJECTS = ${SRC:.c=.o}

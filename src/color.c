@@ -21,6 +21,7 @@ double		percent(int start, int end, int current)
 	distance = end - start;
 	return ((distance == 0) ? 1.0 : (placement / distance));
 }
+
 /*
 int			point_color(int min_z, int max_z, int cur_z)
 {
