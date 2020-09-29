@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_map.c                                        :+:      :+:    :+:   */
+/*   mouseinput.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: avornane <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,39 +12,14 @@
 
 #include "../fractol.h"
 
-t_coords		render(t_coords *point, t_mlx_data *data, t_coords cord)
+int		mousething(int x, int y, t_mlx_data *data)
 {
-	point->x = cord.x;
-	point->z = cord.z;
-	point->y = cord.y;
-	point->x += data->translate_x;
-	point->y += data->translate_y;
-	return (*point);
-}
-
-int				print_map(t_map *map, t_mlx_data data)
-{
-	int			i;
-	int			j;
-	t_coords	tmp;
-	t_coords	tmp1;
-
-	i = 0;
-	while (i <= map->height)
+	if (!data->pause)
 	{
-		j = 0;
-		while (j <= map->width)
-		{
-			if (j != map->width)
-				draw(render(&tmp, &data, map->coords[i][j]),
-					render(&tmp1, &data, map->coords[i][j + 1]), &data);
-			if (i != map->height)
-				draw(render(&tmp, &data, map->coords[i][j]),
-					render(&tmp1, &data, map->coords[i + 1][j]), &data);
-			j++;
-		}
-		i++;
+		double perc_x = percent(0, data->width, x);
+		double perc_y = percent(0, data->height, y);
+		data->fract.cRe = -1 + (2 * perc_x);
+		data->fract.cIm = -1 + (2 * perc_y);
 	}
-	mlx_put_image_to_window(data.mlx_ptr, data.mlx_win, data.img_ptr, 0, 0);
-	return (0);
+	return(1);
 }

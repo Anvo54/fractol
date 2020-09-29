@@ -12,11 +12,6 @@
 
 #include "../fractol.h"
 
-void	empty_image(t_mlx_data *data)
-{
-	ft_bzero(data->img_data, data->width * data->height * 4);
-}
-
 void	reset_values(t_mlx_data *data)
 {
 	data->move_x = 0;
@@ -24,15 +19,8 @@ void	reset_values(t_mlx_data *data)
 	data->zoom = 1;
 }
 
-int		deal_key(int key, t_mlx_data *data)
+void	move(int key, t_mlx_data *data)
 {
-	ft_putnbr(key);
-	write(1, "\n", 1);
-	if (key == 65307 || key == 53)
-	{
-		mlx_destroy_window(data->mlx_ptr, data->mlx_win);
-		exit(0);
-	}
 	if (key == 65363)
 		data->move_x += 0.01 / data->zoom;
 	if (key == 65361)
@@ -41,16 +29,32 @@ int		deal_key(int key, t_mlx_data *data)
 		data->move_y += 0.01 / data->zoom;
 	if (key == 65364)
 		data->move_y -= 0.01 / data->zoom;
+}
+
+void	zoom(int key, t_mlx_data *data)
+{
+	if (key == 44)
+		data->zoom *= 1.5;
+	if (key == 46)
+		data->zoom /= (data->zoom / 10 < 0.000002) ? 1 : 10;
+}
+
+int		deal_key(int key, t_mlx_data *data)
+{
+	if (key == 65307 || key == 53)
+	{
+		mlx_destroy_window(data->mlx_ptr, data->mlx_win);
+		exit(0);
+	}
+	if (key == 32)
+		data->pause = (data->pause == 0) ? 1 : 0;
+	if (key == 65361 || key == 65362 || key == 65363 || key == 65364)
+		move(key, data);
+	if (key == 44 || key == 46)
+		zoom(key, data);
 	if (key == 45)
 		reset_values(data);
-	if (key == 44)
-		data->zoom += 10;
-	if (key == 46 && data->zoom > 0)
-		data->zoom -= 10;
 	if (key == 50)
 		mlx_put_image_to_window(data->mlx_ptr, data->mlx_win, data->img_ptr, 0, 0);
-	printf("Keyboard move_x %f move_y %f zoom: %f\n", data->move_x,data->move_y, data->zoom);
-
-	empty_image(data);
 	return (1);
 }
