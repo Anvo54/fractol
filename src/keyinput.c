@@ -16,7 +16,7 @@ void	reset_values(t_mlx_data *data)
 {
 	data->move_x = 0;
 	data->move_y = 0;
-	data->zoom = 1;
+	data->zoom = 0.5;
 }
 
 void	move(int key, t_mlx_data *data)

@@ -12,75 +12,79 @@
 
 #include "../fractol.h"
 
-void	*julia_plot(void *args)
+void			*julia_plot(void *args)
 {
-	t_mlx_data *d;
-	double zx;
-	double zy;
-	double xtemp;
-	size_t i;
+	t_mlx_data	*d;
+	double		zx;
+	double		zy;
+	double		xtemp;
+	size_t		i;
 
 	d = (t_mlx_data*)args;
 	i = 0;
-	zx = (d->fract.y - d->height / 2) / (0.5 * d->zoom * d->height) + d->move_y;
-	zy = 1.5 * (d->fract.x - d->width / 2) / (0.5 * d->zoom * d->width) + d->move_x;
-	while ((zx * zx) + (zy * zy) < 4 && i < d->max_iterations)
+	zx = (d->fract.y - d->h / 2) / (0.5 * d->zoom * d->h) + d->move_y;
+	zy = 1.5 * (d->fract.x - d->w / 2) / (0.5 * d->zoom * d->w) + d->move_x;
+	while ((zx * zx) + (zy * zy) < 4 && i < d->max_i)
 	{
-		xtemp = zx * zx - zy * zy + d->fract.cRe;
-		zy = zx * zy * 2 + d->fract.cIm;
+		xtemp = zx * zx - zy * zy + d->fract.re;
+		zy = zx * zy * 2 + d->fract.im;
 		zx = xtemp;
 		i++;
 	}
 	return (void*)i;
 }
 
-int	mandelbrot_plot(t_mlx_data *d)
+int				mandelbrot_plot(t_mlx_data *d)
 {
-	double xr = 0;
-	double yi = 0;
-	double xtemp;
+	double		xr;
+	double		yi;
+	double		xtemp;
+	int			i;
 
-	int i;
+	xr = 0;
+	yi = 0;
 	i = 0;
-	d->fract.cRe = 1.5 * (d->fract.x - d->width / 2) / (0.5 * d->zoom * d->width) + d->move_x;
-	d->fract.cIm = (d->fract.y - d->height / 2) / (0.5 * d->zoom * d->height) + d->move_y;
-	while((xr * xr) + (yi * yi) <= 4 && i++ < d->max_iterations)
+	d->fract.re = 1.5 * (d->fract.x - d->w / 2) / (0.5 * d->zoom * d->w) + d->move_x;
+	d->fract.im = (d->fract.y - d->h / 2) / (0.5 * d->zoom * d->h) + d->move_y;
+	while ((xr * xr) + (yi * yi) <= 4 && i++ < d->max_i)
 	{
-		xtemp = (xr*xr) - (yi*yi) + d->fract.cRe;
-		yi = 2 * xr*yi + d->fract.cIm;
+		xtemp = (xr * xr) - (yi * yi) + d->fract.re;
+		yi = 2 * (xr * yi) + d->fract.im;
 		xr = xtemp;
 	}
-	return(i);
+	return (i);
 }
 
-int	burning_plot(t_mlx_data *d)
+int				burning_plot(t_mlx_data *d)
 {
-	double xr = 0;
-	double yi = 0;
-	double xtemp;
+	double		xr;
+	double		yi;
+	double		xtemp;
+	int			i;
 
-	int i;
+	xr = 0;
+	yi = 0;
 	i = 0;
-	d->fract.cRe = 1.5 * (d->fract.x - d->width / 2) / (0.5 * d->zoom * d->width) + d->move_x;
-	d->fract.cIm = (d->fract.y - d->height / 2) / (0.5 * d->zoom * d->height) + d->move_y;
-	while((xr * xr) + (yi * yi) <= 4 && i++ < d->max_iterations)
+	d->fract.re = 1.5 * (d->fract.x - d->w / 2) / (0.5 * d->zoom * d->w) + d->move_x;
+	d->fract.im = (d->fract.y - d->h / 2) / (0.5 * d->zoom * d->h) + d->move_y;
+	while ((xr * xr) + (yi * yi) <= 4 && i++ < d->max_i)
 	{
-		xtemp = (xr*xr) - (yi*yi) + d->fract.cRe;
-		yi = fabs(2 * xr*yi) + d->fract.cIm;
+		xtemp = (xr * xr) - (yi * yi) + d->fract.re;
+		yi = fabs(2 * xr * yi) + d->fract.im;
 		xr = xtemp;
 	}
-	return(i);
+	return (i);
 }
 
-int		count_fractal(t_mlx_data *d)
+int				count_fractal(t_mlx_data *d)
 {
-	int		i;
+	int			i;
 
 	d->fract.y = 0;
-	while (d->fract.y++ < d->height)
+	while (d->fract.y++ < d->h)
 	{
 		d->fract.x = 0;
-		while (d->fract.x++ < d->width)
+		while (d->fract.x++ < d->w)
 		{
 			if (d->selected == burning_ship)
 				i = burning_plot(d);
@@ -92,5 +96,5 @@ int		count_fractal(t_mlx_data *d)
 		}
 	}
 	mlx_put_image_to_window(d->mlx_ptr, d->mlx_win, d->img_ptr, 0, 0);
-	return(0);
+	return (0);
 }

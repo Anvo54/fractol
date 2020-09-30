@@ -16,7 +16,7 @@ void			add_pixel(t_mlx_data *fractol, int x, int y, int color)
 {
 	int			i;
 
-	if (x <= fractol->width && x >= 0 && y <= fractol->height && y >= 0)
+	if (x <= fractol->w && x >= 0 && y <= fractol->h && y >= 0)
 	{
 		i = (x * fractol->bpp / 8) + (y * fractol->size_line);
 		fractol->img_data[i] = color;

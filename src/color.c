@@ -22,13 +22,7 @@ double		percent(int start, int end, int current)
 	return ((distance == 0) ? 1.0 : (placement / distance));
 }
 
-int		get_color(int a, int r, int g, int b)
+int			get_color(int a, int r, int g, int b)
 {
-	(r < 0) ? r = 0: 0;
-	(r > 255) ? r = 255: 0;
-	(g < 0) ? r = 0: 0;
-	(g > 255) ? r = 255: 0;
-	(b < 0) ? r = 0: 0;
-	(b > 255) ? r = 255: 0;
-	return(a << 24 | r << 16 | g << 8 | b);
+	return (a << 24 | r << 16 | g << 8 | b);
 }
