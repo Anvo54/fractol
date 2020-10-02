@@ -54,7 +54,8 @@ int		deal_key(int key, t_mlx_data *data)
 		zoom(key, data);
 	if (key == 45)
 		reset_values(data);
-	if (key == 50)
-		mlx_put_image_to_window(data->mlx_ptr, data->mlx_win, data->img_ptr, 0, 0);
+	(key == 49) ? data->selected = julia : 0;
+	(key == 50) ? data->selected = mandelbrot : 0;
+	(key == 51) ? data->selected = burning_ship : 0;
 	return (1);
 }

@@ -13,10 +13,9 @@
 #ifndef FRACTOL_H
 # define FRACTOL_H
 # define BUFFER 4096
-# define USAGE "Available parameters: julia, mandelbrot, burning_ship \
-	\n\nExample: ./fractol julia\n"
-# define min_c 40
-# define max_c 255
+# define USAGE "Available parameters: julia, mandelbrot, burning_ship"
+# define MIN_C 40
+# define MAX_C 255
 # include "mlx.h"
 # include <stdlib.h>
 # include <math.h>
@@ -24,8 +23,6 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
-# include <pthread.h>
-#include <stdio.h>
 
 typedef	enum
 {
@@ -33,9 +30,9 @@ typedef	enum
 	julia,
 	mandelbrot,
 	burning_ship,
-}		fractal;
+}	t_fractal;
 
-typedef	struct 			s_fractol
+typedef	struct			s_fractol
 {
 	double				im;
 	double				re;
@@ -61,19 +58,16 @@ typedef struct			s_mlx_data
 	int					max_i;
 	int					*color;
 	int					rgb[3];
-	fractal				selected;
+	t_fractal			selected;
 	t_fractol			fract;
 }						t_mlx_data;
 
-
 int						deal_key(int key, t_mlx_data *data);
-void					add_pixel(t_mlx_data *fractol, int x, int y, int color);
-double					percent(int start, int end, int current);
-int						get_color(int a, int r, int g, int b);
-void					*julia_plot(void *args);
-int						mandelbrot_plot(t_mlx_data *d);
-int						burning_plot(t_mlx_data *d);
-int						count_fractal(t_mlx_data *d);
 int						mouse_motion(int x, int y, t_mlx_data *data);
-int						mouse_too(int b, int x, int y, t_mlx_data *d);
+int						mouse_zoom(int b, int x, int y, t_mlx_data *d);
+void					add_pixel(t_mlx_data *fractol, int x, int y, int color);
+int						get_color(int a, int r, int g, int b);
+double					percent(int start, int end, int current);
+void					calculate_colors(t_mlx_data *d);
+int						count_fractal(t_mlx_data *d);
 #endif

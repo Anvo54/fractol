@@ -12,18 +12,32 @@
 
 #include "../fractol.h"
 
-void			*julia_plot(void *args)
+void			hud(t_mlx_data *d)
 {
-	t_mlx_data	*d;
+	if (d->selected == julia)
+		mlx_string_put(d->mlx_ptr, d->mlx_win, 20, 20, 0xFFFFFF,
+			"(1) Julia");
+	if (d->selected == mandelbrot)
+		mlx_string_put(d->mlx_ptr, d->mlx_win, 20, 20, 0xFFFFFF,
+			"(2) Mandelbrot");
+	if (d->selected == burning_ship)
+		mlx_string_put(d->mlx_ptr, d->mlx_win, 20, 20, 0xFFFFFF,
+			"(3) Burning Ship");
+	if (d->pause == 1)
+		mlx_string_put(d->mlx_ptr, d->mlx_win, d->w * 0.9, d->h * 0.9, 0xFFFFFF,
+			"Pause");
+}
+
+int				julia_plot(t_mlx_data *d, int y, int x)
+{
 	double		zx;
 	double		zy;
 	double		xtemp;
-	size_t		i;
+	int			i;
 
-	d = (t_mlx_data*)args;
 	i = 0;
-	zx = (d->fract.y - d->h / 2) / (0.5 * d->zoom * d->h) + d->move_y;
-	zy = 1.5 * (d->fract.x - d->w / 2) / (0.5 * d->zoom * d->w) + d->move_x;
+	zx = (y - d->h / 2) / (0.5 * d->zoom * d->h) + d->move_y;
+	zy = 1.5 * (x - d->w / 2) / (0.5 * d->zoom * d->w) + d->move_x;
 	while ((zx * zx) + (zy * zy) < 4 && i < d->max_i)
 	{
 		xtemp = zx * zx - zy * zy + d->fract.re;
@@ -31,10 +45,10 @@ void			*julia_plot(void *args)
 		zx = xtemp;
 		i++;
 	}
-	return (void*)i;
+	return (i);
 }
 
-int				mandelbrot_plot(t_mlx_data *d)
+int				mandelbrot_plot(t_mlx_data *d, int y, int x)
 {
 	double		xr;
 	double		yi;
@@ -44,8 +58,8 @@ int				mandelbrot_plot(t_mlx_data *d)
 	xr = 0;
 	yi = 0;
 	i = 0;
-	d->fract.re = 1.5 * (d->fract.x - d->w / 2) / (0.5 * d->zoom * d->w) + d->move_x;
-	d->fract.im = (d->fract.y - d->h / 2) / (0.5 * d->zoom * d->h) + d->move_y;
+	d->fract.re = 1.5 * (x - d->w / 2) / (0.5 * d->zoom * d->w) + d->move_x;
+	d->fract.im = (y - d->h / 2) / (0.5 * d->zoom * d->h) + d->move_y;
 	while ((xr * xr) + (yi * yi) <= 4 && i++ < d->max_i)
 	{
 		xtemp = (xr * xr) - (yi * yi) + d->fract.re;
@@ -55,7 +69,7 @@ int				mandelbrot_plot(t_mlx_data *d)
 	return (i);
 }
 
-int				burning_plot(t_mlx_data *d)
+int				burning_plot(t_mlx_data *d, int y, int x)
 {
 	double		xr;
 	double		yi;
@@ -65,8 +79,8 @@ int				burning_plot(t_mlx_data *d)
 	xr = 0;
 	yi = 0;
 	i = 0;
-	d->fract.re = 1.5 * (d->fract.x - d->w / 2) / (0.5 * d->zoom * d->w) + d->move_x;
-	d->fract.im = (d->fract.y - d->h / 2) / (0.5 * d->zoom * d->h) + d->move_y;
+	d->fract.re = 1.5 * (x - d->w / 2) / (0.5 * d->zoom * d->w) + d->move_x;
+	d->fract.im = (y - d->h / 2) / (0.5 * d->zoom * d->h) + d->move_y;
 	while ((xr * xr) + (yi * yi) <= 4 && i++ < d->max_i)
 	{
 		xtemp = (xr * xr) - (yi * yi) + d->fract.re;
@@ -79,22 +93,25 @@ int				burning_plot(t_mlx_data *d)
 int				count_fractal(t_mlx_data *d)
 {
 	int			i;
+	int			x;
+	int			y;
 
-	d->fract.y = 0;
-	while (d->fract.y++ < d->h)
+	y = 0;
+	while (y++ < d->h)
 	{
-		d->fract.x = 0;
-		while (d->fract.x++ < d->w)
+		x = 0;
+		while (x++ <= d->w)
 		{
 			if (d->selected == burning_ship)
-				i = burning_plot(d);
+				i = burning_plot(d, y, x);
 			if (d->selected == mandelbrot)
-				i = mandelbrot_plot(d);
+				i = mandelbrot_plot(d, y, x);
 			if (d->selected == julia)
-				i = (int)julia_plot(d);
-			add_pixel(d, d->fract.x, d->fract.y, d->color[i]);
+				i = julia_plot(d, y, x);
+			add_pixel(d, x, y, d->color[i]);
 		}
 	}
 	mlx_put_image_to_window(d->mlx_ptr, d->mlx_win, d->img_ptr, 0, 0);
+	hud(d);
 	return (0);
 }

@@ -14,3 +14,5 @@ run:
   ./fractol julia
   
   ./fractol mandelbrot
+
+  ./fractol burning_ship

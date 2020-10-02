@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int 	ft_smallest_int(int *t, int size)
+int		ft_smallest_int(int *t, int size)
 {
 	int	smallest;
 	int	i;

@@ -12,47 +12,14 @@
 
 #include "fractol.h"
 
-int				get_shade(int min, int max, int cur)
-{
-	return (min_c + (max_c - min_c) * percent(min, max, cur));
-}
-
-void			calculate_colors(t_mlx_data *d)
-{
-	int			i;
-	double		p;
-
-	if (!(d->color = (int*)malloc(sizeof(int) * d->max_i)))
-		exit(0);
-	i = 0;
-	while (i++ <= d->max_i)
-	{
-		p = percent(0, d->max_i, i);
-		if (p <= 0.2)
-			d->rgb[0] = get_shade(0, d->max_i * 0.2, i);
-		else if (p <= 0.4)
-			d->rgb[1] = get_shade(d->max_i * 0.2, d->max_i * 0.4, i);
-		else if (p <= 0.6)
-			d->rgb[2] = get_shade(d->max_i * 0.4, d->max_i * 0.6, i);
-		else if (p <= 0.8)
-			d->rgb[0] = max_c - get_shade(d->max_i * 0.6, d->max_i * 0.8, i);
-		else if (p <= 1.0)
-		{
-			d->rgb[1] = max_c - get_shade(d->max_i * 0.8, d->max_i * 1.0, i);
-			d->rgb[2] = max_c - get_shade(d->max_i * 0.8, d->max_i * 1.0, i);
-		}
-		d->color[i] = get_color(max_c, d->rgb[0], d->rgb[1], d->rgb[2]);
-	}
-}
-
 void			format_data(t_mlx_data *data)
 {
 	data->w = 1080;
 	data->h = 720;
 	data->max_i = 100;
-	data->rgb[0] = min_c;
-	data->rgb[1] = min_c;
-	data->rgb[2] = min_c;
+	data->rgb[0] = MIN_C;
+	data->rgb[1] = MIN_C;
+	data->rgb[2] = MIN_C;
 	data->zoom = 0.5;
 	data->move_x = 0;
 	data->move_y = 0;
@@ -85,7 +52,7 @@ int				main(int argc, char **argv)
 		if (data.selected != none)
 		{
 			mlx_key_hook(data.mlx_win, deal_key, &data);
-			mlx_hook(data.mlx_win, 4, (1L << 2), mouse_too, &data);
+			mlx_hook(data.mlx_win, 4, (1L << 2), mouse_zoom, &data);
 			mlx_hook(data.mlx_win, 6, (1L << 6), mouse_motion, &data);
 			mlx_loop_hook(data.mlx_ptr, count_fractal, &data);
 			mlx_loop(data.mlx_ptr);
