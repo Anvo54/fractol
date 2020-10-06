@@ -16,3 +16,9 @@ run:
   ./fractol mandelbrot
 
   ./fractol burning_ship
+
+### Screenshots
+
+![Julia](julia.png)
+![Mandelbrot](mandelbrot.png)
+![Burning Ship](burning_ship.png)
