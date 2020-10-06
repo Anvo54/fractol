@@ -12,7 +12,7 @@
 
 NAME = fractol
 LIB = libft/libft.a 
-CFLAGS = -Wall -Werror -Wextra -pthread -O3
+CFLAGS = -Wall -Werror -Wextra
 SRCS = main.c src/keyinput.c src/draw.c src/color.c src/fractals.c \
 	src/mouseinput.c
 

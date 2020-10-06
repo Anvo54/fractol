@@ -20,7 +20,7 @@ void			format_data(t_mlx_data *data)
 	data->rgb[0] = MIN_C;
 	data->rgb[1] = MIN_C;
 	data->rgb[2] = MIN_C;
-	data->zoom = 0.5;
+	data->zoom = 1;
 	data->move_x = 0;
 	data->move_y = 0;
 	data->pause = 0;
@@ -41,7 +41,6 @@ int				main(int argc, char **argv)
 
 	if (argc > 1)
 	{
-		format_data(&data);
 		data.selected = none;
 		if (!ft_strcmp(argv[1], "julia"))
 			data.selected = julia;
@@ -49,14 +48,15 @@ int				main(int argc, char **argv)
 			data.selected = mandelbrot;
 		else if (!ft_strcmp(argv[1], "burning_ship"))
 			data.selected = burning_ship;
-		if (data.selected != none)
-		{
-			mlx_key_hook(data.mlx_win, deal_key, &data);
-			mlx_hook(data.mlx_win, 4, (1L << 2), mouse_zoom, &data);
-			mlx_hook(data.mlx_win, 6, (1L << 6), mouse_motion, &data);
-			mlx_loop_hook(data.mlx_ptr, count_fractal, &data);
-			mlx_loop(data.mlx_ptr);
-		}
+	}
+	if (data.selected != none)
+	{
+		format_data(&data);
+		mlx_key_hook(data.mlx_win, deal_key, &data);
+		mlx_hook(data.mlx_win, 4, (1L << 2), mouse_zoom, &data);
+		mlx_hook(data.mlx_win, 6, (1L << 6), mouse_motion, &data);
+		mlx_loop_hook(data.mlx_ptr, count_fractal, &data);
+		mlx_loop(data.mlx_ptr);
 	}
 	else
 		ft_putstr(USAGE);

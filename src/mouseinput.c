@@ -12,6 +12,18 @@
 
 #include "../fractol.h"
 
+void		move_to(int x, int y, t_mlx_data *d)
+{
+	if (x > d->w / 2)
+		d->move_x += ((double)(x - (d->w / 2)) / d->w * 3) / d->zoom;
+	if (x < d->w / 2)
+		d->move_x -= -((double)(x - (d->w / 2)) / d->w * 3) / d->zoom;
+	if (y > d->h / 2)
+		d->move_y += ((double)(y - (d->h / 2)) / d->h * 2) / d->zoom;
+	if (y < d->h / 2)
+		d->move_y -= -((double)(y - (d->h / 2)) / d->h * 2) / d->zoom;
+}
+
 int			mouse_motion(int x, int y, t_mlx_data *data)
 {
 	double	perc_x;
@@ -33,16 +45,17 @@ int			mouse_zoom(int b, int x, int y, t_mlx_data *d)
 		d->zoom *= 1.5;
 	if (b == 5)
 		d->zoom /= (d->zoom / 10 < 0.000002) ? 1 : 10;
-	if (b == 1)
+	if (b == 4)
 	{
-		if (x > d->w / 2)
-			d->move_x += ((double)(x - (d->w / 2)) / d->w * 3) / d->zoom;
-		if (x < d->w / 2)
-			d->move_x -= -((double)(x - (d->w / 2)) / d->w * 3) / d->zoom;
-		if (y > d->h / 2)
-			d->move_y += ((double)(y - (d->h / 2)) / d->h * 2) / d->zoom;
-		if (y < d->h / 2)
-			d->move_y -= -((double)(y - (d->h / 2)) / d->h * 2) / d->zoom;
+		move_to(x, y, d);
+		d->zoom *= 1.5;
 	}
+	if (b == 5)
+	{
+		move_to(x, y, d);
+		d->zoom /= (d->zoom / 10 < 0.000002) ? 1 : 10;
+	}
+	if (b == 1)
+		move_to(x, y, d);
 	return (0);
 }

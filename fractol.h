@@ -12,8 +12,7 @@
 
 #ifndef FRACTOL_H
 # define FRACTOL_H
-# define BUFFER 4096
-# define USAGE "Available parameters: julia, mandelbrot, burning_ship"
+# define USAGE "Available parameters: julia, mandelbrot, burning_ship\n"
 # define MIN_C 40
 # define MAX_C 255
 # include "mlx.h"
@@ -36,8 +35,6 @@ typedef	struct			s_fractol
 {
 	double				im;
 	double				re;
-	double				x;
-	double				y;
 }						t_fractol;
 
 typedef struct			s_mlx_data
