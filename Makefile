@@ -16,21 +16,25 @@ CFLAGS = -Wall -Werror -Wextra
 SRCS = main.c src/keyinput.c src/draw.c src/color.c src/fractals.c \
 	src/mouseinput.c
 
-OBJ = $(SRCS:.c=.o)
+OBJ = ${SRCS:.c=.o}
 
 GCC = gcc -I /usr/X11/include -L /usr/X11/lib -lX11 -lmlx -lXext
 
-all: $(NAME)
+all:	$(NAME)
 
-$(NAME):
-	make -C libft
+$(NAME): $(OBJ) $(LIB)
 	$(GCC) $(SRCS) $(LIB) -o $(NAME)
+
+$(LIB): buildlib
+
+buildlib:
+	make -C libft
 
 clean:
 	/bin/rm -f $(OBJ)
 	make -C libft/ clean
 
-fclean : clean
+fclean: clean
 	/bin/rm -f $(NAME)
 	make -C libft/ fclean
 

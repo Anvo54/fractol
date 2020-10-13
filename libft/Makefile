@@ -34,8 +34,8 @@ HEADERS = ./
 
 all:	$(NAME)
 
-$(NAME) :
-	gcc -g -Wall -Werror -Wextra -I $(HEADERS) -c $(SRC)
+$(NAME): $(OBJECTS)
+	gcc -Wall -Werror -Wextra -I $(HEADERS) -c $(SRC)
 	ar rc $(NAME) $(OBJECTS)
 	ranlib $(NAME)
 

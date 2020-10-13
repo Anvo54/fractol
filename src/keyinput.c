@@ -54,8 +54,11 @@ int		deal_key(int key, t_mlx_data *data)
 		zoom(key, data);
 	if (key == 45)
 		reset_values(data);
-	(key == 49) ? data->selected = julia : 0;
-	(key == 50) ? data->selected = mandelbrot : 0;
-	(key == 51) ? data->selected = burning_ship : 0;
+	if (key == 49)
+		data->selected = julia;
+	if (key == 50)
+		data->selected = mandelbrot;
+	if (key == 51)
+		data->selected = burning_ship;
 	return (1);
 }
